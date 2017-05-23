@@ -80,7 +80,7 @@ span {
 }
 
 .idea-card-header {
-  display:flex;
+  display: flex;
   font-family: 'roboto slab';
   color: #6D6E71;
   justify-content: space-between;
@@ -151,7 +151,7 @@ span {
 
   .article-text-container {
     font-size: 14px;
-  
+
   }
 
 
