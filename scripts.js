@@ -3,7 +3,7 @@ var ideaBodyInput = $('.body-input');
 var emptyIdeaCard = $('.idea-card');
 var storageArray = [];
 
-//
+
 //clear input fields
 function clearInput() {
   ideaTitleInput.val('');
@@ -23,11 +23,11 @@ function prependIdeaCard(newIdeaCard) {
   $('.bottom-section').prepend(`<section
     class="card-holder-section">
       <article class="idea-card" id=${newIdeaCard.id}>
-        <div class="idea-card-header">
+        <div contenteditable='true' class="idea-card-header">
           <h2>${newIdeaCard.title}</h2>
           <button class="delete-button" type="button" name="button"></button>
         </div>
-        <div contenteditable= 'true' class="article-text-container">
+        <div contenteditable='true' class="article-text-container">
           <p>${newIdeaCard.body}</p>
         </div>
         <div class="quality-control-container">
@@ -38,7 +38,6 @@ function prependIdeaCard(newIdeaCard) {
       </article>
     </section>`);
   clearInput();
-
 }
 
 //add new idea card on click
@@ -47,35 +46,39 @@ $('.save-button').on('click', function(event) {
   var ideaTitle = ideaTitleInput.val();
   var ideaBody = ideaBodyInput.val();
   var newIdeaCard = new constructNewIdea(ideaTitle, ideaBody);
-  prependIdeaCard(newIdeaCard);
   constructNewIdea();
+  prependIdeaCard(newIdeaCard);
   storeIdeaCard(newIdeaCard);
-  retrieveIdeas(newIdeaCard);
-  // console.log(newIdeaCard.title);
+  postFromLocal();
 });
 
 //store unique ID
 function storeIdeaCard(newIdeaCard) {
-  localStorage.setItem(newIdeaCard.id, JSON.stringify(newIdeaCard));
-  // console.log(newIdeaCard.id);
+  storageArray.push(newIdeaCard);
+  localStorage.setItem('ideaIdInfo', JSON.stringify(storageArray));
 }
 
 //retrieve idea card
-function retrieveIdeas(newIdeaCard) {
-  if(localStorage.getItem(newIdeaCard.id)) {
-    var storedIdeas = localStorage.getItem(newIdeaCard.id);
-    var parsedIdeas =  JSON.parse(storedIdeas);
-    console.log(parsedIdeas);
-
-    parsedIdeas.forEach(function(newIdeaCard) {
-      var singleIdea = `<article>${newIdeaCard.title}</article>`;
-      emptyIdeaCard.append(singleIdea);
-    })
+function retrieveIdeas() {
+  if(localStorage.getItem('ideaIdInfo')) {
+    var storedIdeas = localStorage.getItem('ideaIdInfo');
+    var parsedIdeas = JSON.parse(storedIdeas);
+    return parsedIdeas;
   } else {
-    console.log('is this working?');
+    console.log('not working');
   }
 }
 retrieveIdeas();
+
+//post cards from local storage
+function postFromLocal(parsedIdeas) {
+  console.log(parsedIdeas);
+  parsedIdeas.forEach(function(newIdeaCard) {
+  prependIdeaCard(newIdeaCard);
+  })
+}
+
+postFromLocal(retrieveIdeas());
 
 //delete idea card from bottom section
 $('.bottom-section').on('click','button.delete-button', function() {
