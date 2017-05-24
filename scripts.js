@@ -1,8 +1,17 @@
 var ideaTitleInput = $('.title-input');
 var ideaBodyInput = $('.body-input');
-var emptyIdeaCard = $('.idea-card');
 var storageArray = [];
 
+function ideasFromLocal() {
+  var keys = Object.keys(localStorage);
+  var keyLength = keys.length;
+
+  for (var i = 0; i < keyLength; i++) {
+    prependIdeaCard(JSON.parse(localStorage.getItem(keys[i])));
+  }
+}
+
+ideasFromLocal();
 
 //clear input fields
 function clearInput() {
@@ -10,7 +19,7 @@ function clearInput() {
   ideaBodyInput.val('');
 }
 
-// //adding card to local storage
+//adding card to local storage constructor function
 function constructNewIdea(title, body) {
   this.title = title;
   this.body = body;
@@ -49,41 +58,25 @@ $('.save-button').on('click', function(event) {
   constructNewIdea();
   prependIdeaCard(newIdeaCard);
   storeIdeaCard(newIdeaCard);
-  postFromLocal();
 });
 
 //store unique ID
 function storeIdeaCard(newIdeaCard) {
-  storageArray.push(newIdeaCard);
-  localStorage.setItem('ideaIdInfo', JSON.stringify(storageArray));
+  storageArray.push(newIdeaCard.id);
+  localStorage.setItem(newIdeaCard.id, JSON.stringify(newIdeaCard));
 }
 
-//retrieve idea card
-function retrieveIdeas() {
-  if(localStorage.getItem('ideaIdInfo')) {
-    var storedIdeas = localStorage.getItem('ideaIdInfo');
-    var parsedIdeas = JSON.parse(storedIdeas);
-    return parsedIdeas;
-  } else {
-    console.log('not working');
-  }
+//retrieve ideas from storage
+function retrieveIdeas(id) {
+  var parsedIdeas = JSON.parse(localStorage.getItem(id));
 }
 retrieveIdeas();
-
-//post cards from local storage
-function postFromLocal(parsedIdeas) {
-  console.log(parsedIdeas);
-  parsedIdeas.forEach(function(newIdeaCard) {
-  prependIdeaCard(newIdeaCard);
-  })
-}
-
-postFromLocal(retrieveIdeas());
 
 //delete idea card from bottom section
 $('.bottom-section').on('click','button.delete-button', function() {
   $(this).parents('.idea-card').remove();
 });
+
 
 // //upvote button from default :: not yet functional
 // $('.bottom-section').on('click', 'button.upvote-button', function() {
