@@ -76,13 +76,12 @@ function storeIdeaCard(newIdeaCard) {
 //delete idea card from bottom section
 $('.bottom-section').on('click','button.delete-button', function() {
   $(this).parents('.idea-card').remove();
-  var deleteButton = $(this).parent.prop();
-  localStorage.getItem(deleteButton);
-  console.log(deleteButton);
 });
 
 //need to get correct id for .prop()
-
+function removeFromLocal () {
+  var key 
+}
 // //upvote button from default :: not yet functional
 // $('.bottom-section').on('click', 'button.upvote-button', function() {
 //
