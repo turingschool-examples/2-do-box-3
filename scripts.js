@@ -62,26 +62,24 @@ $('.save-button').on('click', function(event) {
 
 //store unique ID
 function storeIdeaCard(newIdeaCard) {
-  // storageArray.push(newIdeaCard.id);
   localStorage.setItem(newIdeaCard.id, JSON.stringify(newIdeaCard));
 }
-
-// //retrieve ideas from storage
-// function retrieveIdeas(id) {
-//   var parsedIdeas = JSON.parse(localStorage.getItem(id));
-//   console.log(parsedIdeas);
-// }
-// retrieveIdeas();
 
 //delete idea card from bottom section
 $('.bottom-section').on('click','button.delete-button', function() {
   $(this).parents('.idea-card').remove();
 });
 
-//need to get correct id for .prop()
-function removeFromLocal () {
-  var key 
-}
+//edit title box
+$('.bottom-section').on('keyup', '#title-input', function() {
+  console.log('event');
+  // var id = $(this).parent().prop('id');
+  // var parseIdea = JSON.parse(localStorage.getItem(id));
+  // parseIdea.title = $(this).val();
+  // localStorage.setItem(id, JSON.stringify(parseIdea));
+})
+
+
 // //upvote button from default :: not yet functional
 // $('.bottom-section').on('click', 'button.upvote-button', function() {
 //
