@@ -24,7 +24,7 @@ function constructNewIdea(title, body) {
   this.title = title;
   this.body = body;
   this.id = Date.now();
-  this.quality = 'Swill';
+  this.quality = 'swill';
 }
 
 //retrieve content from input fields
@@ -32,12 +32,12 @@ function prependIdeaCard(newIdeaCard) {
   $('.bottom-section').prepend(`<section
     class="card-holder-section">
       <article class="idea-card" id=${newIdeaCard.id}>
-        <div contenteditable='true' class="idea-card-header">
-          <h2>${newIdeaCard.title}</h2>
+        <div>
+          <h2 contenteditable='true' class="idea-card-header">${newIdeaCard.title}</h2>
           <button class="delete-button" type="button" name="button"></button>
         </div>
-        <div contenteditable='true' class="article-text-container">
-          <p>${newIdeaCard.body}</p>
+        <div>
+          <p contenteditable='true' class="article-text-container">${newIdeaCard.body}</p>
         </div>
         <div class="quality-control-container">
         <button class="upvote-button" type="button" name="button"></button>
@@ -67,25 +67,54 @@ function storeIdeaCard(newIdeaCard) {
 
 //delete idea card from bottom section
 $('.bottom-section').on('click','button.delete-button', function() {
+  var id = $(this).closest('.idea-card').prop('id');
+  localStorage.removeItem(id);
   $(this).parents('.idea-card').remove();
 });
 
 //edit title box
-$('.bottom-section').on('keyup', '#title-input', function() {
-  console.log('event');
-  // var id = $(this).parent().prop('id');
-  // var parseIdea = JSON.parse(localStorage.getItem(id));
-  // parseIdea.title = $(this).val();
-  // localStorage.setItem(id, JSON.stringify(parseIdea));
+$('.bottom-section').on('keyup','.idea-card-header',function() {
+  var id = $(this).closest('.idea-card').prop('id');
+  var parseIdea = JSON.parse(localStorage.getItem(id));
+  parseIdea.title = $(this).text();
+  console.log(parseIdea);
+  localStorage.setItem(id, JSON.stringify(parseIdea));
+})
+
+//edit body box
+$('.bottom-section').on('keyup','.article-text-container',function() {
+  console.log('helloooo')
+  var id = $(this).closest('.idea-card').prop('id');
+  var parseIdea = JSON.parse(localStorage.getItem(id));
+  parseIdea.body = $(this).text();
+  console.log(parseIdea);
+  localStorage.setItem(id, JSON.stringify(parseIdea));
 })
 
 
-// //upvote button from default :: not yet functional
-// $('.bottom-section').on('click', 'button.upvote-button', function() {
-//
-// })
-//
-// //downvote button :: not yet functional
-// $('.bottom-section').on('click', 'button.downvote-button', function() {
-//
-// })
+//upvote button from default
+$('.bottom-section').on('click', 'button.upvote-button', function() {
+  var id = $(this).closest('.idea-card').prop('id');
+  var parseIdea = JSON.parse(localStorage.getItem(id));
+    if (parseIdea.quality === 'Swill') {
+      $(this).siblings('p').children().text('Plausible');
+    } else if (parseIdea.quality === 'Plausible') {
+      $(this).siblings('p').children().text('Genius');
+    }
+  parseIdea.quality = $(this).siblings('p').children().text();
+  localStorage.setItem(id, JSON.stringify(parseIdea));
+})
+
+//downvote button
+$('.bottom-section').on('click', 'button.downvote-button', function() {
+  console.log('hello')
+  var id = $(this).closest('.idea-card').prop('id');
+  var parseIdea = JSON.parse(localStorage.getItem(id));
+    if (parseIdea.quality === 'Genius') {
+      $(this).siblings('p').children().text('Plausible');
+    } else if (parseIdea.quality === 'Plausible') {
+      $(this).siblings('p').children().text('Swill');
+    }
+  parseIdea.quality = $(this).siblings('p').children().text();
+  localStorage.setItem(id, JSON.stringify(parseIdea));
+})
