@@ -1,62 +1,58 @@
 *{
   box-sizing: border-box;
 }
+
 body, html, section, main, div, aside {
-  margin: 0;
-  border: 0;
-  padding: 0;
   font-family: 'Roboto Slab', serif;
   font-family: 'Open Sans', sans-serif;
+  border: 0;
+  margin: 0;
+  padding: 0;
 }
 
 body {
-  width: 100%;
   height: 100%;
-
+  width: 100%;
 }
 
-
-
 h1{
+  background-color: #E5F3F2;
+  color: #00A79D;
+  flex-direction: column;
+  text-align: center;
   font-family: 'roboto slab';
   font-weight:700;
   font-size: 48px;
-  color: #00A79D;
-  background-color: #E5F3F2;
   margin-bottom: 0;
   margin-top: 0;
-  padding-top: 30px;
-  padding-bottom: 30px;
-  flex-direction: column;
-  text-align: center;
+  padding: 30px 0;
 }
 
 h2 {
   width: 80%;
 }
 
-
 span {
+  color: #6D6E71;
   font-family: 'roboto slab';
   font-weight:700;
-  color: #6D6E71;
 }
 
 .top-section {
   background-color: #E5F3F2;
-  width: 100%;
-  height: 300px;
   display: flex;
   flex-direction: column;
+  width: 100%;
+  height: 300px;
 }
 
 .input {
-  width: 75%;
-  height: 40px;
+  border: solid 2px #D1D3D4;
   display: block;
   margin: 0px auto 20px;
-  border: solid 2px #D1D3D4;
   padding-left:5px;
+  height: 40px;
+  width: 75%;
 }
 
 .web-inputs::-webkit-input-placeholder {
@@ -64,9 +60,9 @@ span {
 }
 
 .save-button {
-  color: #FFFFFF;
   background-color: #00A79D;
   border: none;
+  color: #FFFFFF;
   font-size: 22px;
 }
 
@@ -79,14 +75,14 @@ span {
 }
 
 .idea-card {
-  width: 75%;
   border-bottom: solid 2px #D1D3D4;
   margin: auto;
+  width: 75%;
 }
 
 .idea-card-header {
-  font-family: 'roboto slab';
   color: #6D6E71;
+  font-family: 'roboto slab';
 }
 
 .idea-name-section {
@@ -107,19 +103,19 @@ span {
 
 .delete-button:hover {
   background-image: url(assets/delete-hover.svg);
-
 }
 
 .article-text-container {
-  font-size: 18px;
   color: #939598;
+  font-size: 18px;
+  width: 75%;
 }
 
 .quality-control-container {
+  color:  #6D6E71;
   display: flex;
   font-size: 18px;
   justify-content: flex-start;
-  color:  #6D6E71;
 }
 
 .upvote-button {
@@ -136,7 +132,6 @@ span {
 
 .upvote-button:hover{
   background-image: url(assets/upvote-hover.svg);
-
 }
 
 .downvote-button {
