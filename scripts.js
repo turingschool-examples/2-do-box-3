@@ -57,9 +57,14 @@ $('.save-button').on('click', function(event) {
   var ideaTitle = ideaTitleInput.val();
   var ideaBody = ideaBodyInput.val();
   var newIdeaCard = new constructNewIdea(ideaTitle, ideaBody);
-  constructNewIdea();
+  // constructNewIdea();
   prependIdeaCard(newIdeaCard);
   storeIdeaCard(newIdeaCard);
+  var keys = Object.keys(localStorage);
+  var keyLength = keys.length;
+  for (var j = 0; j < keyLength; j++) {
+    ideaArray.push(JSON.parse(localStorage.getItem(keys[j])));
+  }
 });
 
 $('.bottom-section').on('click','button.delete-button', function() {
@@ -82,6 +87,8 @@ $('.bottom-section').on('keypress','.idea-card-header',function(event) {
     var parseIdea = JSON.parse(localStorage.getItem(id));
     parseIdea.title = $(this).text();
     localStorage.setItem(id, JSON.stringify(parseIdea));
+    console.log($(this))
+    $(this).prop('contenteditable', false);
   }
 })
 
@@ -94,7 +101,7 @@ $('.bottom-section').on('keyup focusout','.article-text-container',function() {
 
 $('.bottom-section').on('keydown','.article-text-container',function(event) {
   if (event.which == 13) {
-    document.execCommand("DefaultParagraphSeparator", false, "p");
+    // document.execCommand("DefaultParagraphSeparator", false, "p");
     var id = $(this).closest('.idea-card').prop('id');
     var parseIdea = JSON.parse(localStorage.getItem(id));
     parseIdea.title = $(this).text();
