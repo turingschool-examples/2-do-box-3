@@ -93,6 +93,40 @@ function downvoteBtnClick() {
   filterTasks();
 }
 
+$('.todo-card').on('click', 'button.completed-btn-select', function() {
+  var id = $(this).closest('.todo-card').prop('id');
+  var parseTask = JSON.parse(localStorage.getItem(id));
+    if (parseTask.completed === false) {
+      $(this).closest('.todo-card').addClass('completed-task');
+      parseTask.completed = true;
+      console.log('parsetask completed was false')
+    } else if (parseTask.completed === true) {
+      $(this).closest('.todo-card').removeClass('completed-task');
+      parseTask.completed = false;
+      console.log('parsetask completed was true')
+    }
+  localStorage.setItem(id, JSON.stringify(parseTask))
+  filterTasks();
+})
+
+function toggleCompletedTask() {
+  var id = $(this).closest('.todo-card').prop('id');
+  console.log($(this))
+  var parseTask = JSON.parse(localStorage.getItem(id));
+  console.log(parseTask)
+    if (parseTask.completed === false) {
+      $(this).closest('.todo-card').toggleClass('completed-task');
+      parseTask.completed = true;
+      console.log('parsetask completed false')
+    } else if (parseTask.completed === true) {
+      $(this).closest('.todo-card').toggleClass('completed-task');
+      parseTask.completed = false;
+      console.log('parsetask completed true')
+    }
+  localStorage.setItem(id, JSON.stringify(parseTask))
+  filterTasks();
+}
+
 function editTaskBody() {
   var id = $(this).closest('.todo-card').prop('id');
   var parseTask = JSON.parse(localStorage.getItem(id));
@@ -150,9 +184,12 @@ function prependTaskCard(newTaskCard) {
           <p contenteditable='true' class="article-text-container">${newTaskCard.taskBody}</p>
         </div>
         <div class="quality-control-container">
-        <button class="upvote-btn" type="button" name="button"></button>
-        <button class="downvote-btn" type="button" name="button"></button>
-        <p>quality: <span class="quality">${newTaskCard.quality}</p>
+          <button class="upvote-btn" type="button" name="button"></button>
+          <button class="downvote-btn" type="button" name="button"></button>
+          <p>quality: <span class="quality">${newTaskCard.quality}</p>
+          <div class="completed-container">
+            <button class="completed-btn-select" type="button" name="button"></button>
+          </div>
         </div>
       </article>
     </section>`);
@@ -176,6 +213,7 @@ function todoObj(title, task) {
   this.taskBody = task;
   this.id = Date.now();
   this.quality = 'Swill';
+  this.completed = false;
 }
 
 function toggleSaveDisable() {
