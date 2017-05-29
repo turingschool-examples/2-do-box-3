@@ -87,6 +87,9 @@ span {
 .idea-card-header {
   color: #6D6E71;
   font-family: 'roboto slab';
+  padding: 5px 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .idea-name-section {
@@ -113,6 +116,7 @@ span {
   color: #939598;
   font-size: 18px;
   width: 75%;
+  padding: 5px 0;
 }
 
 .quality-control-container {
@@ -120,6 +124,7 @@ span {
   display: flex;
   font-size: 18px;
   justify-content: flex-start;
+  margin-bottom: 20px;
 }
 
 .upvote-btn {
@@ -158,8 +163,6 @@ span {
 
   .article-text-container {
     font-size: 14px;
-
   }
-
 
 }
