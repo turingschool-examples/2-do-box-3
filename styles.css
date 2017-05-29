@@ -38,7 +38,7 @@ span {
   font-weight:700;
 }
 
-.top-section {
+.todo-input {
   background-color: #E5F3F2;
   display: flex;
   flex-direction: column;
@@ -59,15 +59,19 @@ span {
   color: #D1D3D4;
 }
 
-.save-button {
+.save-btn {
   background-color: #00A79D;
   border: none;
   color: #FFFFFF;
   font-size: 22px;
 }
 
-.save-button:hover {
+.save-btn:hover {
   background-color: #045E55;
+}
+
+.save-btn:disabled {
+  background-color: #939598;
 }
 
 .search-box {
@@ -90,7 +94,7 @@ span {
   justify-content: space-between;
 }
 
-.delete-button {
+.delete-btn {
   background: none;
   background-image: url(assets/delete.svg);
   background-repeat: no-repeat;
@@ -101,7 +105,7 @@ span {
   width: 30px;
 }
 
-.delete-button:hover {
+.delete-btn:hover {
   background-image: url(assets/delete-hover.svg);
 }
 
@@ -118,7 +122,7 @@ span {
   justify-content: flex-start;
 }
 
-.upvote-button {
+.upvote-btn {
   background: none;
   background-image: url(assets/upvote.svg);
   background-repeat: no-repeat;
@@ -130,11 +134,11 @@ span {
   width: 30px;
 }
 
-.upvote-button:hover{
+.upvote-btn:hover{
   background-image: url(assets/upvote-hover.svg);
 }
 
-.downvote-button {
+.downvote-btn {
   background: none;
   background-image: url(assets/downvote.svg);
   background-repeat: no-repeat;
@@ -146,7 +150,7 @@ span {
   width: 30px;
 }
 
-.downvote-button:hover {
+.downvote-btn:hover {
   background-image: url(assets/downvote-hover.svg);
 }
 

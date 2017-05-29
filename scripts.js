@@ -1,104 +1,32 @@
+
 parseAndPrependLocalStorage();
 
-
-function parseAndPrependLocalStorage() {
-  var keys = Object.keys(localStorage);
-  var keyLength = keys.length;
-  for (var i = 0; i < keyLength; i++) {
-    prependIdeaCard(JSON.parse(localStorage.getItem(keys[i])));
-  }
-}
-
-function pushLocalStorageIntoArray() {
-  var ideaArray = [];
-  var keys = Object.keys(localStorage);
-  var keyLength = keys.length;
-  for (var j = 0; j < keyLength; j++) {
-    ideaArray.push(JSON.parse(localStorage.getItem(keys[j])));
-  } return ideaArray;
-}
-
-function clearInputs() {
-  $('.title-input').val('');
-  $('.body-input').val('');
+$(window).on('load', function() {
   $('.title-input').focus();
-}
+  toggleSaveDisable();
+})
 
-function constructNewIdea(title, body) {
-  this.title = title;
-  this.body = body;
-  this.id = Date.now();
-  this.quality = 'Swill';
-}
-
-function prependIdeaCard(newIdeaCard) {
-  $('.bottom-section').prepend(`<section
-    class="card-holder-section">
-      <article class="idea-card" id=${newIdeaCard.id}>
-        <div class="idea-name-section">
-          <h2 contenteditable='true' class="idea-card-header">${newIdeaCard.title}</h2>
-          <button class="delete-button" type="button" name="button"></button>
-        </div>
-        <div>
-          <p contenteditable='true' class="article-text-container">${newIdeaCard.body}</p>
-        </div>
-        <div class="quality-control-container">
-        <button class="upvote-button" type="button" name="button"></button>
-        <button class="downvote-button" type="button" name="button"></button>
-        <p>quality: <span class="quality">${newIdeaCard.quality}</p>
-        </div>
-      </article>
-    </section>`);
-}
-
-function storeIdeaCard(newIdeaCard) {
-  localStorage.setItem(newIdeaCard.id, JSON.stringify(newIdeaCard));
-}
-
-$('.save-button').on('click', function(event) {
-    event.preventDefault();
-  var newIdeaCard = makeNewIdeaObjectInstance();
-  // constructNewIdea();
-  prependIdeaCard(newIdeaCard);
-  storeIdeaCard(newIdeaCard);
-  clearInputs();
+$(window).on('keyup', function(e) {
+  if(e.keyCode === 13 && ($('.title-input').val() !== '') && ($('.body-input').val() !== '')){
+    toggleSaveDisable();
+    $('.save-btn').trigger('click');
+  }
 });
 
-function makeNewIdeaObjectInstance() {
-  var ideaTitle = $('.title-input').val();
-  var ideaBody = $('.body-input').val();
-  var newIdeaCard = new constructNewIdea(ideaTitle, ideaBody);
-  return newIdeaCard
-}
+$('.body-input').on('input', function() {
+  toggleSaveDisable();
+})
 
-$('.bottom-section').on('click','button.delete-button', deleteIdea)
+$('.title-input').on('input', function() {
+  toggleSaveDisable();
+})
 
-function deleteIdea() {
-  var id = $(this).closest('.idea-card').prop('id');
-  localStorage.removeItem(id);
-  $(this).parents('.idea-card').remove();
-}
+$('.todo-lib').on('click','button.delete-btn', deleteIdea)
 
-$('.bottom-section').on('keyup focusout','.idea-card-header', editIdeaTitle)
+//may want to refactor to switch case function
+$('.todo-lib').on('click', 'button.downvote-btn', downvoteBtnClick)
 
-function editIdeaTitle() {
-  var id = $(this).closest('.idea-card').prop('id');
-  var parseIdea = JSON.parse(localStorage.getItem(id));
-  parseIdea.title = $(this).text();
-  localStorage.setItem(id, JSON.stringify(parseIdea));
-}
-
-$('.bottom-section').on('keyup focusout','.article-text-container',editIdeaBody)
-
-function editIdeaBody() {
-  var id = $(this).closest('.idea-card').prop('id');
-  var parseIdea = JSON.parse(localStorage.getItem(id));
-  parseIdea.body = $(this).text();
-  localStorage.setItem(id, JSON.stringify(parseIdea));
-}
-
-//may want to refactor to switch case
-$('.bottom-section').on('click', 'button.upvote-button', function() {
+$('.todo-lib').on('click', 'button.upvote-btn', function() {
   var id = $(this).closest('.idea-card').prop('id');
   var parseIdea = JSON.parse(localStorage.getItem(id));
     if (parseIdea.quality === 'Swill') {
@@ -110,17 +38,17 @@ $('.bottom-section').on('click', 'button.upvote-button', function() {
   localStorage.setItem(id, JSON.stringify(parseIdea));
 })
 
-$('.bottom-section').on('click', 'button.downvote-button', function() {
-  var id = $(this).closest('.idea-card').prop('id');
-  var parseIdea = JSON.parse(localStorage.getItem(id));
-    if (parseIdea.quality === 'Genius') {
-      $(this).siblings('p').children().text('Plausible');
-    } else if (parseIdea.quality === 'Plausible') {
-      $(this).siblings('p').children().text('Swill');
-    }
-  parseIdea.quality = $(this).siblings('p').children().text();
-  localStorage.setItem(id, JSON.stringify(parseIdea));
-})
+$('.todo-lib').on('focusout','.article-text-container',editIdeaBody)
+$('.todo-lib').on('focusout','.idea-card-header', editIdeaTitle)
+
+
+$('.save-btn').on('click', function(event) {
+  event.preventDefault();
+  var newIdeaCard = makeNewIdeaObjectInstance();
+  prependIdeaCard(newIdeaCard);
+  storeIdeaCard(newIdeaCard);
+  clearInputs();
+});
 
 $('.search-box').on('input', function() {
   var searchResult = $(this).val().toUpperCase();
@@ -131,8 +59,160 @@ $('.search-box').on('input', function() {
       return idea
     }
   })
-  $('.bottom-section').empty();
+  $('.todo-lib').empty();
   results.forEach(function(result){
-  prependIdeaCard(result);
- })
+    prependIdeaCard(result);
+  })
+})
+
+function clearInputs() {
+  $('.title-input').val('');
+  $('.body-input').val('');
+  $('.title-input').focus();
+  toggleSaveDisable();
+}
+
+function deleteIdea() {
+  var id = $(this).closest('.idea-card').prop('id');
+  localStorage.removeItem(id);
+  $(this).parents('.idea-card').remove();
+  pushLocalStorageIntoArray();
+}
+
+function downvoteBtnClick() {
+  var id = $(this).closest('.idea-card').prop('id');
+  var parseIdea = JSON.parse(localStorage.getItem(id));
+    if (parseIdea.quality === 'Genius') {
+      $(this).siblings('p').children().text('Plausible');
+    } else if (parseIdea.quality === 'Plausible') {
+      $(this).siblings('p').children().text('Swill');
+    }
+  parseIdea.quality = $(this).siblings('p').children().text();
+  localStorage.setItem(id, JSON.stringify(parseIdea));
+}
+
+function editIdeaBody() {
+  var id = $(this).closest('.idea-card').prop('id');
+  var parseIdea = JSON.parse(localStorage.getItem(id));
+  parseIdea.body = $(this).text();
+  localStorage.setItem(id, JSON.stringify(parseIdea));
+}
+
+function editIdeaTitle() {
+  var id = $(this).closest('.idea-card').prop('id');
+  var parseIdea = JSON.parse(localStorage.getItem(id));
+  parseIdea.title = $(this).text();
+  localStorage.setItem(id, JSON.stringify(parseIdea));
+}
+
+function makeNewIdeaObjectInstance() {
+  var ideaTitle = $('.title-input').val();
+  var ideaBody = $('.body-input').val();
+  var newIdeaCard = new todoObj(ideaTitle, ideaBody);
+  return newIdeaCard
+}
+
+function parseAndPrependLocalStorage() {
+  var keys = Object.keys(localStorage);
+  var keyLength = keys.length;
+  for (var i = 0; i < keyLength; i++) {
+    prependIdeaCard(JSON.parse(localStorage.getItem(keys[i])));
+  }
+}
+
+function prependIdeaCard(newIdeaCard) {
+  $('.todo-lib').prepend(`<section
+    class="card-holder-section">
+      <article class="idea-card" id=${newIdeaCard.id}>
+        <div class="idea-name-section">
+          <h2 contenteditable='true' class="idea-card-header">${newIdeaCard.title}</h2>
+          <button class="delete-btn" type="button" name="button"></button>
+        </div>
+        <div>
+          <p contenteditable='true' class="article-text-container">${newIdeaCard.body}</p>
+        </div>
+        <div class="quality-control-container">
+        <button class="upvote-btn" type="button" name="button"></button>
+        <button class="downvote-btn" type="button" name="button"></button>
+        <p>quality: <span class="quality">${newIdeaCard.quality}</p>
+        </div>
+      </article>
+    </section>`);
+}
+
+function pushLocalStorageIntoArray() {
+  var ideaArray = [];
+  var keys = Object.keys(localStorage);
+  var keyLength = keys.length;
+  for (var j = 0; j < keyLength; j++) {
+    ideaArray.push(JSON.parse(localStorage.getItem(keys[j])));
+  } return ideaArray;
+}
+
+function storeIdeaCard(newIdeaCard) {
+  localStorage.setItem(newIdeaCard.id, JSON.stringify(newIdeaCard));
+}
+
+function todoObj(title, body) {
+  this.title = title;
+  this.body = body;
+  this.id = Date.now();
+  this.quality = 'Swill';
+}
+
+function toggleSaveDisable() {
+  var titleInput = $('.title-input').val();
+  var bodyInput = $('.body-input').val();
+  if (titleInput === '' || bodyInput === '') {
+    $('.save-btn').prop('disabled', true)
+  } else {
+    $('.save-btn').prop('disabled', false)
+  }
+}
+
+function getID(e){
+  var id = $(this).closest('.idea-card').prop('id');
+  return id
+}
+
+function parseStorage(id) {
+  var parseIdea = JSON.parse(localStorage.getItem(id));
+  return parseIdea
+}
+
+function checkDownvoteConditional(parseIdea) {
+  if (parseIdea.quality === 'Genius') {
+    $(this).siblings('p').children().text('Plausible');
+  } else if (parseIdea.quality === 'Plausible') {
+    $(this).siblings('p').children().text('Swill');
+  }
+}
+
+function parseQualitySetNewID(parseIdea) {
+  parseIdea.quality = $(this).siblings('p').children().text();
+  localStorage.setItem(id, JSON.stringify(parseIdea));
+}
+
+//Attempt to fix the contentEditable with enter keypress
+
+$('.todo-lib').on('input keydown', '.idea-card-header', function(e) {
+  if (e.keyCode === 13) {
+    e.preventDefault()
+    $('.idea-card-header').prop('contenteditable', false)
+  }
+})
+
+$('.idea-card-header').on('click', function() {
+  $('.idea-card-header').prop('contenteditable', true)
+})
+
+$('.todo-lib').on('input keydown', '.article-text-container', function(e) {
+  if (e.keyCode === 13) {
+    e.preventDefault()
+    $('.article-text-container').prop('contenteditable', false)
+  }
+})
+
+$('.article-text-container').on('click', function() {
+  $('.article-text-container').prop('contenteditable', true)
 })
