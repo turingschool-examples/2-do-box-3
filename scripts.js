@@ -1,23 +1,27 @@
-var ideaTitleInput = $('.title-input');
-var ideaBodyInput = $('.body-input');
-var ideaArray = [];
+parseAndPrependLocalStorage();
 
-function ideasFromLocal() {
+
+function parseAndPrependLocalStorage() {
   var keys = Object.keys(localStorage);
   var keyLength = keys.length;
-    for (var i = 0; i < keyLength; i++) {
-      prependIdeaCard(JSON.parse(localStorage.getItem(keys[i])));
-    }
-    for (var j = 0; j < keyLength; j++) {
-      ideaArray.push(JSON.parse(localStorage.getItem(keys[j])));
-    } return ideaArray;
+  for (var i = 0; i < keyLength; i++) {
+    prependIdeaCard(JSON.parse(localStorage.getItem(keys[i])));
+  }
 }
 
-ideasFromLocal();
+function pushLocalStorageIntoArray() {
+  var ideaArray = [];
+  var keys = Object.keys(localStorage);
+  var keyLength = keys.length;
+  for (var j = 0; j < keyLength; j++) {
+    ideaArray.push(JSON.parse(localStorage.getItem(keys[j])));
+  } return ideaArray;
+}
 
-function clearInput() {
-  ideaTitleInput.val('');
-  ideaBodyInput.val('');
+function clearInputs() {
+  $('.title-input').val('');
+  $('.body-input').val('');
+  $('.title-input').focus();
 }
 
 function constructNewIdea(title, body) {
@@ -45,7 +49,6 @@ function prependIdeaCard(newIdeaCard) {
         </div>
       </article>
     </section>`);
-  clearInput();
 }
 
 function storeIdeaCard(newIdeaCard) {
@@ -54,61 +57,47 @@ function storeIdeaCard(newIdeaCard) {
 
 $('.save-button').on('click', function(event) {
     event.preventDefault();
-  var ideaTitle = ideaTitleInput.val();
-  var ideaBody = ideaBodyInput.val();
-  var newIdeaCard = new constructNewIdea(ideaTitle, ideaBody);
+  var newIdeaCard = makeNewIdeaObjectInstance();
   // constructNewIdea();
   prependIdeaCard(newIdeaCard);
   storeIdeaCard(newIdeaCard);
-  var keys = Object.keys(localStorage);
-  var keyLength = keys.length;
-  for (var j = 0; j < keyLength; j++) {
-    ideaArray.push(JSON.parse(localStorage.getItem(keys[j])));
-  }
+  clearInputs();
 });
 
-$('.bottom-section').on('click','button.delete-button', function() {
+function makeNewIdeaObjectInstance() {
+  var ideaTitle = $('.title-input').val();
+  var ideaBody = $('.body-input').val();
+  var newIdeaCard = new constructNewIdea(ideaTitle, ideaBody);
+  return newIdeaCard
+}
+
+$('.bottom-section').on('click','button.delete-button', deleteIdea)
+
+function deleteIdea() {
   var id = $(this).closest('.idea-card').prop('id');
   localStorage.removeItem(id);
   $(this).parents('.idea-card').remove();
-});
+}
 
-$('.bottom-section').on('keyup focusout','.idea-card-header',function() {
+$('.bottom-section').on('keyup focusout','.idea-card-header', editIdeaTitle)
+
+function editIdeaTitle() {
   var id = $(this).closest('.idea-card').prop('id');
   var parseIdea = JSON.parse(localStorage.getItem(id));
   parseIdea.title = $(this).text();
   localStorage.setItem(id, JSON.stringify(parseIdea));
-})
+}
 
-$('.bottom-section').on('keypress','.idea-card-header',function(event) {
-  if (event.which == 13) {
-    document.execCommand("DefaultParagraphSeparator", false, "p")
-    var id = $(this).closest('.idea-card').prop('id');
-    var parseIdea = JSON.parse(localStorage.getItem(id));
-    parseIdea.title = $(this).text();
-    localStorage.setItem(id, JSON.stringify(parseIdea));
-    console.log($(this))
-    $(this).prop('contenteditable', false);
-  }
-})
+$('.bottom-section').on('keyup focusout','.article-text-container',editIdeaBody)
 
-$('.bottom-section').on('keyup focusout','.article-text-container',function() {
+function editIdeaBody() {
   var id = $(this).closest('.idea-card').prop('id');
   var parseIdea = JSON.parse(localStorage.getItem(id));
   parseIdea.body = $(this).text();
   localStorage.setItem(id, JSON.stringify(parseIdea));
-})
+}
 
-$('.bottom-section').on('keydown','.article-text-container',function(event) {
-  if (event.which == 13) {
-    // document.execCommand("DefaultParagraphSeparator", false, "p");
-    var id = $(this).closest('.idea-card').prop('id');
-    var parseIdea = JSON.parse(localStorage.getItem(id));
-    parseIdea.title = $(this).text();
-    localStorage.setItem(id, JSON.stringify(parseIdea));
-  }
-})
-
+//may want to refactor to switch case
 $('.bottom-section').on('click', 'button.upvote-button', function() {
   var id = $(this).closest('.idea-card').prop('id');
   var parseIdea = JSON.parse(localStorage.getItem(id));
@@ -135,12 +124,15 @@ $('.bottom-section').on('click', 'button.downvote-button', function() {
 
 $('.search-box').on('input', function() {
   var searchResult = $(this).val().toUpperCase();
-  console.log(searchResult)
+  var ideaArray = pushLocalStorageIntoArray();
+  console.log('idea array', ideaArray)
   var results = ideaArray.filter(function(idea) {
-   return idea.title.toUpperCase().includes(searchResult) || idea.body.toUpperCase().includes(searchResult)
+    if (idea.title.toUpperCase().includes(searchResult) || idea.body.toUpperCase().includes(searchResult)) {
+      return idea
+    }
   })
   $('.bottom-section').empty();
- results.forEach(function(result){
-   prependIdeaCard(result);
+  results.forEach(function(result){
+  prependIdeaCard(result);
  })
 })
