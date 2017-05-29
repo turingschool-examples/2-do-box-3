@@ -15,7 +15,7 @@ body {
   width: 100%;
 }
 
-h1{
+h1 {
   background-color: #E5F3F2;
   color: #00A79D;
   flex-direction: column;
@@ -78,13 +78,14 @@ span {
   margin-top: 25px;
 }
 
-.idea-card {
+.todo-card {
   border-bottom: solid 2px #D1D3D4;
   margin: auto;
   width: 75%;
+  margin-bottom: 20px;
 }
 
-.idea-card-header {
+.todo-card-header {
   color: #6D6E71;
   font-family: 'roboto slab';
   padding: 5px 0;
@@ -92,7 +93,7 @@ span {
   text-overflow: ellipsis;
 }
 
-.idea-name-section {
+.task-name-section {
   display: flex;
   justify-content: space-between;
 }
