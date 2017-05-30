@@ -15,7 +15,7 @@ body {
   width: 100%;
 }
 
-h1{
+h1 {
   background-color: #E5F3F2;
   color: #00A79D;
   flex-direction: column;
@@ -38,7 +38,7 @@ span {
   font-weight:700;
 }
 
-.top-section {
+.todo-input {
   background-color: #E5F3F2;
   display: flex;
   flex-direction: column;
@@ -59,38 +59,65 @@ span {
   color: #D1D3D4;
 }
 
-.save-button {
+.save-btn {
   background-color: #00A79D;
   border: none;
   color: #FFFFFF;
   font-size: 22px;
 }
 
-.save-button:hover {
+.save-btn:hover {
   background-color: #045E55;
+}
+
+.save-btn:disabled {
+  background-color: #939598;
 }
 
 .search-box {
   margin-top: 25px;
 }
 
-.idea-card {
+.todo-card {
   border-bottom: solid 2px #D1D3D4;
   margin: auto;
   width: 75%;
+  margin-bottom: 20px;
 }
 
-.idea-card-header {
+.todo-card-header {
   color: #6D6E71;
   font-family: 'roboto slab';
+  padding: 5px 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.idea-name-section {
+.task-name-section {
   display: flex;
   justify-content: space-between;
 }
 
-.delete-button {
+.completed-btn-select {
+  background: none;
+  background-image: url(assets/checking.svg);
+  background-repeat: no-repeat;
+  background-size: contain;
+  border: none;
+  height: 26px;
+  width: 26px;
+}
+
+.completed-btn-select:hover {
+  background-image: url(assets/checking-hover.svg);
+}
+
+.completed-task {
+  background-color: #F2F4F4;
+  text-decoration: line-through;
+}
+
+.delete-btn {
   background: none;
   background-image: url(assets/delete.svg);
   background-repeat: no-repeat;
@@ -101,7 +128,7 @@ span {
   width: 30px;
 }
 
-.delete-button:hover {
+.delete-btn:hover {
   background-image: url(assets/delete-hover.svg);
 }
 
@@ -109,6 +136,7 @@ span {
   color: #939598;
   font-size: 18px;
   width: 75%;
+  padding: 5px 0;
 }
 
 .quality-control-container {
@@ -116,9 +144,10 @@ span {
   display: flex;
   font-size: 18px;
   justify-content: flex-start;
+  margin-bottom: 20px;
 }
 
-.upvote-button {
+.upvote-btn {
   background: none;
   background-image: url(assets/upvote.svg);
   background-repeat: no-repeat;
@@ -130,11 +159,11 @@ span {
   width: 30px;
 }
 
-.upvote-button:hover{
+.upvote-btn:hover{
   background-image: url(assets/upvote-hover.svg);
 }
 
-.downvote-button {
+.downvote-btn {
   background: none;
   background-image: url(assets/downvote.svg);
   background-repeat: no-repeat;
@@ -146,16 +175,21 @@ span {
   width: 30px;
 }
 
-.downvote-button:hover {
+.downvote-btn:hover {
   background-image: url(assets/downvote-hover.svg);
 }
 
+.completed-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-grow: 2;
+  margin-right: 3px;
+}
 @media (max-width: 375px){
 
   .article-text-container {
     font-size: 14px;
-
   }
-
 
 }
