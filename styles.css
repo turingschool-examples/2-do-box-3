@@ -113,10 +113,9 @@ span {
 }
 
 .completed-task {
-  background-color: blue;
-  /*text-decoration: line-through;*/
+  background-color: #F2F4F4;
+  text-decoration: line-through;
 }
-/*#F2F4F4*/
 
 .delete-btn {
   background: none;

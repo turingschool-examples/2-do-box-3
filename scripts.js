@@ -97,31 +97,25 @@ $('.todo-card').on('click', 'button.completed-btn-select', function() {
   var id = $(this).closest('.todo-card').prop('id');
   var parseTask = JSON.parse(localStorage.getItem(id));
     if (parseTask.completed === false) {
-      $(this).closest('.todo-card').addClass('completed-task');
+      $(this).closest('.todo-card').toggleClass('completed-task');
       parseTask.completed = true;
-      console.log('parsetask completed was false')
     } else if (parseTask.completed === true) {
-      $(this).closest('.todo-card').removeClass('completed-task');
+      $(this).closest('.todo-card').toggleClass('completed-task');
       parseTask.completed = false;
-      console.log('parsetask completed was true')
     }
   localStorage.setItem(id, JSON.stringify(parseTask))
-  filterTasks();
+  // filterTasks();
 })
 
 function toggleCompletedTask() {
   var id = $(this).closest('.todo-card').prop('id');
-  console.log($(this))
   var parseTask = JSON.parse(localStorage.getItem(id));
-  console.log(parseTask)
     if (parseTask.completed === false) {
       $(this).closest('.todo-card').toggleClass('completed-task');
       parseTask.completed = true;
-      console.log('parsetask completed false')
     } else if (parseTask.completed === true) {
       $(this).closest('.todo-card').toggleClass('completed-task');
       parseTask.completed = false;
-      console.log('parsetask completed true')
     }
   localStorage.setItem(id, JSON.stringify(parseTask))
   filterTasks();
