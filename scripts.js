@@ -5,6 +5,23 @@ $(window).on('load', function() {
   toggleSaveDisable();
 })
 
+showMostRecentTodos();
+
+function showMostRecentTodos() {
+  var recentArray = pushLocalStorageIntoArray();
+  recentArray.forEach(function(todo, index) {
+    if (index > 9) {
+      recentArray.splice(index, recentArray.length-index)
+    }
+  })
+  $('.todo-lib').children().remove();
+  recentArray.forEach(function(todo) {
+    prependTaskCard(todo);
+  })
+}
+
+
+
 $(window).on('keyup', function(e) {
   if(e.keyCode === 13 && ($('.title-input').val() !== '') && ($('.task-input').val() !== '')){
     toggleSaveDisable();
