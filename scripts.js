@@ -33,31 +33,6 @@ $('.todo-lib').on('click', 'button.upvote-btn', function() {
   filterTasks();
 })
 
-function switchImportanceUp(parseTask) {
-  switch (parseTask.importance) {
-    case 'None':
-      parseTask.importance = 'Low'
-      $(this).siblings('p').children().text('Low');
-      break;
-    case 'Low':
-      parseTask.importance = 'Normal'
-      $(this).siblings('p').children().text('Normal');
-      break;
-    case 'Normal':
-      parseTask.importance = 'High'
-      $(this).siblings('p').children().text('High');
-      break;
-    case 'High':
-      parseTask.importance = 'Critical'
-      $(this).siblings('p').children().text('Critical');
-      break;
-    default:
-      break;
-  }
-}
-
-
-
 $('.todo-card').on('click', 'button.completed-btn-select', function() {
   var id = $(this).closest('.todo-card').prop('id');
   var parseTask = JSON.parse(localStorage.getItem(id));
@@ -98,6 +73,14 @@ $('.search-box').on('input', function() {
   })
 })
 
+$('.critical-btn').on('click', importanceBtnFilter);
+$('.high-btn').on('click', importanceBtnFilter);
+$('.normal-btn').on('click', importanceBtnFilter);
+$('.low-btn').on('click', importanceBtnFilter);
+$('.none-btn').on('click', importanceBtnFilter);
+
+
+
 function clearInputs() {
   $('.title-input').val('');
   $('.task-input').val('');
@@ -119,45 +102,6 @@ function downvoteBtnClick() {
   switchImportanceDown(parseTask);
   localStorage.setItem(id, JSON.stringify(parseTask));
   filterTasks();
-}
-
-function switchImportanceDown(parseTask) {
-  switch (parseTask.importance) {
-    case 'Low':
-      parseTask.importance = 'None'
-      $(this).siblings('p').children().text('None');
-      break;
-    case 'Normal':
-      parseTask.importance = 'Low'
-      $(this).siblings('p').children().text('Low');
-      break;
-    case 'High':
-      parseTask.importance = 'Normal'
-      $(this).siblings('p').children().text('Normal');
-      break;
-    case 'Critical':
-      parseTask.importance = 'High'
-      $(this).siblings('p').children().text('High');
-      break;
-    default:
-      break;
-  }
-}
-
-
-
-function toggleCompletedTask() {
-  var id = $(this).closest('.todo-card').prop('id');
-  var parseTask = JSON.parse(localStorage.getItem(id));
-    if (parseTask.completed === false) {
-      $(this).closest('.todo-card').toggleClass('completed-task');
-      parseTask.completed = true;
-    } else if (parseTask.completed === true) {
-      $(this).closest('.todo-card').toggleClass('completed-task');
-      parseTask.completed = false;
-    }
-  localStorage.setItem(id, JSON.stringify(parseTask))
-  // filterTasks();
 }
 
 function editTaskBody() {
@@ -187,6 +131,19 @@ function filterTasks() {
   $('.todo-lib').empty();
   results.forEach(function(result){
     prependTaskCard(result);
+  })
+}
+
+function importanceBtnFilter(e) {
+  var importanceArray = pushLocalStorageIntoArray();
+  var importanceResults = importanceArray.filter(function(task) {
+    if (task.importance === $(e.target).text()) {
+      return task
+    }
+  })
+  $('.todo-lib').empty();
+  importanceResults.forEach(function(result) {
+    prependTaskCard(result)
   })
 }
 
@@ -241,12 +198,72 @@ function storeTaskCard(newTaskCard) {
   localStorage.setItem(newTaskCard.id, JSON.stringify(newTaskCard));
 }
 
+function switchImportanceDown(parseTask) {
+  switch (parseTask.importance) {
+    case 'Low':
+      parseTask.importance = 'None'
+      $(this).siblings('p').children().text('None');
+      break;
+    case 'Normal':
+      parseTask.importance = 'Low'
+      $(this).siblings('p').children().text('Low');
+      break;
+    case 'High':
+      parseTask.importance = 'Normal'
+      $(this).siblings('p').children().text('Normal');
+      break;
+    case 'Critical':
+      parseTask.importance = 'High'
+      $(this).siblings('p').children().text('High');
+      break;
+    default:
+      break;
+  }
+}
+
+function switchImportanceUp(parseTask) {
+  switch (parseTask.importance) {
+    case 'None':
+      parseTask.importance = 'Low'
+      $(this).siblings('p').children().text('Low');
+      break;
+    case 'Low':
+      parseTask.importance = 'Normal'
+      $(this).siblings('p').children().text('Normal');
+      break;
+    case 'Normal':
+      parseTask.importance = 'High'
+      $(this).siblings('p').children().text('High');
+      break;
+    case 'High':
+      parseTask.importance = 'Critical'
+      $(this).siblings('p').children().text('Critical');
+      break;
+    default:
+      break;
+  }
+}
+
 function todoObj(title, task) {
   this.title = title;
   this.taskBody = task;
   this.id = Date.now();
   this.importance = 'Normal';
   this.completed = false;
+}
+
+function toggleCompletedTask() {
+  var id = $(this).closest('.todo-card').prop('id');
+  var parseTask = JSON.parse(localStorage.getItem(id));
+    if (parseTask.completed === false) {
+      $(this).closest('.todo-card').toggleClass('completed-task');
+      parseTask.completed = true;
+    } else if (parseTask.completed === true) {
+      $(this).closest('.todo-card').toggleClass('completed-task');
+      parseTask.completed = false;
+    }
+  localStorage.setItem(id, JSON.stringify(parseTask))
+  // filterTasks();
 }
 
 function toggleSaveDisable() {

@@ -73,7 +73,30 @@ span {
 .save-btn:disabled {
   background-color: #939598;
 }
-
+.importance-search-container {
+  display: flex;
+  align-content: center;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.importance-lvl-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 25px;
+  width: 75%;
+}
+.importance-lvl-btn button {
+  height: 40px;
+  width: 16%;
+  background-color: #00A79D;
+  border: none;
+  color: #FFFFFF;
+  font-family: 'roboto slab';
+  font-size: 15px;
+  font-weight: 300;
+  letter-spacing: 0.7px;
+}
 .search-box {
   margin-top: 25px;
 }
