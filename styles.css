@@ -98,6 +98,25 @@ span {
   justify-content: space-between;
 }
 
+.completed-btn-select {
+  background: none;
+  background-image: url(assets/checking.svg);
+  background-repeat: no-repeat;
+  background-size: contain;
+  border: none;
+  height: 26px;
+  width: 26px;
+}
+
+.completed-btn-select:hover {
+  background-image: url(assets/checking-hover.svg);
+}
+
+.completed-task {
+  background-color: #F2F4F4;
+  text-decoration: line-through;
+}
+
 .delete-btn {
   background: none;
   background-image: url(assets/delete.svg);
@@ -160,6 +179,13 @@ span {
   background-image: url(assets/downvote-hover.svg);
 }
 
+.completed-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-grow: 2;
+  margin-right: 3px;
+}
 @media (max-width: 375px){
 
   .article-text-container {
