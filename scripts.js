@@ -28,19 +28,52 @@ $('.todo-lib').on('click', 'button.downvote-btn', downvoteBtnClick)
 $('.todo-lib').on('click', 'button.upvote-btn', function() {
   var id = $(this).closest('.todo-card').prop('id');
   var parseTask = JSON.parse(localStorage.getItem(id));
-    if (parseTask.quality === 'Swill') {
-      $(this).siblings('p').children().text('Plausible');
-    } else if (parseTask.quality === 'Plausible') {
-      $(this).siblings('p').children().text('Genius');
-    }
-  parseTask.quality = $(this).siblings('p').children().text();
+  switchImportanceUp(parseTask);
   localStorage.setItem(id, JSON.stringify(parseTask));
   filterTasks();
 })
 
+function switchImportanceUp(parseTask) {
+  switch (parseTask.importance) {
+    case 'None':
+      parseTask.importance = 'Low'
+      $(this).siblings('p').children().text('Low');
+      break;
+    case 'Low':
+      parseTask.importance = 'Normal'
+      $(this).siblings('p').children().text('Normal');
+      break;
+    case 'Normal':
+      parseTask.importance = 'High'
+      $(this).siblings('p').children().text('High');
+      break;
+    case 'High':
+      parseTask.importance = 'Critical'
+      $(this).siblings('p').children().text('Critical');
+      break;
+    default:
+      break;
+  }
+}
+
+
+
+$('.todo-card').on('click', 'button.completed-btn-select', function() {
+  var id = $(this).closest('.todo-card').prop('id');
+  var parseTask = JSON.parse(localStorage.getItem(id));
+    if (parseTask.completed === false) {
+      $(this).closest('.todo-card').toggleClass('completed-task');
+      parseTask.completed = true;
+    } else if (parseTask.completed === true) {
+      $(this).closest('.todo-card').toggleClass('completed-task');
+      parseTask.completed = false;
+    }
+  localStorage.setItem(id, JSON.stringify(parseTask))
+  // filterTasks();
+})
+
 $('.todo-lib').on('focusout','.article-text-container',editTaskBody)
 $('.todo-lib').on('focusout','.todo-card-header', editTaskTitle)
-
 
 $('.save-btn').on('click', function(event) {
   event.preventDefault();
@@ -83,29 +116,35 @@ function deleteTask() {
 function downvoteBtnClick() {
   var id = $(this).closest('.todo-card').prop('id');
   var parseTask = JSON.parse(localStorage.getItem(id));
-    if (parseTask.quality === 'Genius') {
-      $(this).siblings('p').children().text('Plausible');
-    } else if (parseTask.quality === 'Plausible') {
-      $(this).siblings('p').children().text('Swill');
-    }
-  parseTask.quality = $(this).siblings('p').children().text();
+  switchImportanceDown(parseTask);
   localStorage.setItem(id, JSON.stringify(parseTask));
   filterTasks();
 }
 
-$('.todo-card').on('click', 'button.completed-btn-select', function() {
-  var id = $(this).closest('.todo-card').prop('id');
-  var parseTask = JSON.parse(localStorage.getItem(id));
-    if (parseTask.completed === false) {
-      $(this).closest('.todo-card').toggleClass('completed-task');
-      parseTask.completed = true;
-    } else if (parseTask.completed === true) {
-      $(this).closest('.todo-card').toggleClass('completed-task');
-      parseTask.completed = false;
-    }
-  localStorage.setItem(id, JSON.stringify(parseTask))
-  // filterTasks();
-})
+function switchImportanceDown(parseTask) {
+  switch (parseTask.importance) {
+    case 'Low':
+      parseTask.importance = 'None'
+      $(this).siblings('p').children().text('None');
+      break;
+    case 'Normal':
+      parseTask.importance = 'Low'
+      $(this).siblings('p').children().text('Low');
+      break;
+    case 'High':
+      parseTask.importance = 'Normal'
+      $(this).siblings('p').children().text('Normal');
+      break;
+    case 'Critical':
+      parseTask.importance = 'High'
+      $(this).siblings('p').children().text('High');
+      break;
+    default:
+      break;
+  }
+}
+
+
 
 function toggleCompletedTask() {
   var id = $(this).closest('.todo-card').prop('id');
@@ -118,7 +157,7 @@ function toggleCompletedTask() {
       parseTask.completed = false;
     }
   localStorage.setItem(id, JSON.stringify(parseTask))
-  filterTasks();
+  // filterTasks();
 }
 
 function editTaskBody() {
@@ -180,7 +219,7 @@ function prependTaskCard(newTaskCard) {
         <div class="quality-control-container">
           <button class="upvote-btn" type="button" name="button"></button>
           <button class="downvote-btn" type="button" name="button"></button>
-          <p>quality: <span class="quality">${newTaskCard.quality}</p>
+          <p>quality: <span class="quality">${newTaskCard.importance}</p>
           <div class="completed-container">
             <button class="completed-btn-select" type="button" name="button"></button>
           </div>
@@ -206,7 +245,7 @@ function todoObj(title, task) {
   this.title = title;
   this.taskBody = task;
   this.id = Date.now();
-  this.quality = 'Swill';
+  this.importance = 'Normal';
   this.completed = false;
 }
 
@@ -232,15 +271,15 @@ function parseStorage(id) {
 }
 
 function checkDownvoteConditional(parseTask) {
-  if (parseTask.quality === 'Genius') {
+  if (parseTask.importance === 'Genius') {
     $(this).siblings('p').children().text('Plausible');
-  } else if (parseTask.quality === 'Plausible') {
+  } else if (parseTask.importance === 'Plausible') {
     $(this).siblings('p').children().text('Swill');
   }
 }
 
 function parseQualitySetNewID(parseTask) {
-  parseTask.quality = $(this).siblings('p').children().text();
+  parseTask.importance = $(this).siblings('p').children().text();
   localStorage.setItem(id, JSON.stringify(parseTask));
 }
 
