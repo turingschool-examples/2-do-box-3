@@ -9,6 +9,14 @@ showMostRecentTodos();
 
 function showMostRecentTodos() {
   var recentArray = pushLocalStorageIntoArray();
+  // if (recentArray.length > 10) {
+  //   recentArray.forEach(function(task, index) {
+  //     recentArray[]
+  //   })
+  // }
+  //use the highest number of date.now() (10 highest key values)
+
+  //If sort and reverse order, use this
   recentArray.forEach(function(todo, index) {
     if (index > 9) {
       recentArray.splice(index, recentArray.length-index)
@@ -74,6 +82,7 @@ $('.save-btn').on('click', function(event) {
   storeTaskCard(newTaskCard);
   clearInputs();
   filterTasks();
+  showMostRecentTodos();
 });
 
 $('.search-box').on('input', function() {
@@ -88,6 +97,9 @@ $('.search-box').on('input', function() {
   results.forEach(function(result){
     prependTaskCard(result);
   })
+  if (!searchResult) {
+    showMostRecentTodos();
+  }
 })
 
 $('.critical-btn').on('click', importanceBtnFilter);
