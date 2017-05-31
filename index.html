@@ -3,22 +3,37 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Idea Box</title>
+    <title>2DoBox</title>
     <link rel="stylesheet" href="normalize.css"></link>
   <link rel="stylesheet" href="styles.css"></link>
   <link href="https://fonts.googleapis.com/css?family=Open+Sans|Roboto+Slab:700" rel="stylesheet">
   </head>
   <body>
-    <section class="top-section">
-      <h1>idea<span>box</span></h1>
+    <section class="todo-input">
+      <h1>2Do<span>Box</span></h1>
       <form class="input-form" action="index.html" method="post">
         <input id="title-input" class="input title-input" placeholder="Title" type="text" name="title input" value="">
-        <input class="input body-input" placeholder="Body" type="text" name="body-input" value="">
-        <button class="input save-button" type="button" name="save button">save</button>
+        <p>Character Count: <span class="title-char-count">0</span></p>
+        <input class="input task-input" placeholder="Task" type="text" name="task-input" value="">
+        <p>Character Count: <span class="task-char-count">0</span></p>
+        <button class="input save-btn" type="button" name="save button" disabled>save</button>
+        <div class="complete-recent-container">
+          <button class="input show-completed-btn">Show Completed Todos</button>
+          <button class="input show-recent-btn">Show Recent Todos</button>
+        </div>
       </form>
     </section>
-        <input class="input search-box" placeholder="Search "class="search" type="text">
-    <section class="bottom-section">
+    <div class="importance-search-container">
+      <div class="importance-lvl-btn">
+        <button class="critical-btn">Critical</button>
+        <button class="high-btn">High</button>
+        <button class="normal-btn">Normal</button>
+        <button class="low-btn">Low</button>
+        <button class="none-btn">None</button>
+      </div>
+      <input class="input search-box" placeholder="Search "class="search" type="text">
+    </div>
+    <section class="todo-lib">
     </section>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="scripts.js" type="text/javascript"></script>
