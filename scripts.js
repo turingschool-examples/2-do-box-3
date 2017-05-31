@@ -31,18 +31,24 @@ function showMostRecentTodos() {
 
 
 $(window).on('keyup', function(e) {
-  if(e.keyCode === 13 && ($('.title-input').val() !== '') && ($('.task-input').val() !== '')){
+  if(e.keyCode === 13 && ($('.title-input').val() !== '') && ($('.task-input').val() !== '' && $('.title-input').val().length < 120) && $('.task-input').val().length < 120){
     toggleSaveDisable();
     $('.save-btn').trigger('click');
   }
 });
 
+
 $('.task-input').on('input', function() {
   toggleSaveDisable();
+  countTaskChar();
 })
 
+$('.title-input').on('keydown', function() {
+  countTitleChar();
+})
 $('.title-input').on('input', function() {
   toggleSaveDisable();
+  countTitleChar();
 })
 
 $('.todo-lib').on('click','button.delete-btn', deleteTask)
@@ -115,6 +121,15 @@ function clearInputs() {
   $('.task-input').val('');
   $('.title-input').focus();
   toggleSaveDisable();
+}
+
+function countTitleChar() {
+  var titleLength = $('.title-input').val().length
+  $('.title-char-count').text(titleLength)
+}
+function countTaskChar() {
+  var taskLength = $('.task-input').val().length
+  $('.task-char-count').text(taskLength)
 }
 
 function deleteTask() {
@@ -298,7 +313,7 @@ function toggleCompletedTask() {
 function toggleSaveDisable() {
   var titleInput = $('.title-input').val();
   var taskInput = $('.task-input').val();
-  if (titleInput === '' || taskInput === '') {
+  if (titleInput === '' || taskInput === '' || $('.title-input').val().length > 120 || $('.task-input').val().length > 120) {
     $('.save-btn').prop('disabled', true)
   } else {
     $('.save-btn').prop('disabled', false)
