@@ -82,6 +82,29 @@ form .save-btn {
 .save-btn:disabled {
   background-color: #939598;
 }
+.complete-recent-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding: 0 18%;
+}
+.show-completed-btn {
+  width: 40%;
+  background-color: #00A79D;
+  border: none;
+  color: #FFFFFF;
+  font-size: 16px;
+  margin: 0;
+}
+.show-recent-btn {
+  width: 40%;
+  background-color: #00A79D;
+  border: none;
+  color: #FFFFFF;
+  font-size: 16px;
+  margin: 0;
+}
 .importance-search-container {
   display: flex;
   align-content: center;

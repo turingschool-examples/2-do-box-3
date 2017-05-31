@@ -1,34 +1,9 @@
-parseAndPrependLocalStorage();
 
 $(window).on('load', function() {
   $('.title-input').focus();
   toggleSaveDisable();
+  showIncompleteTodos();
 })
-
-showMostRecentTodos();
-
-function showMostRecentTodos() {
-  var recentArray = pushLocalStorageIntoArray();
-  // if (recentArray.length > 10) {
-  //   recentArray.forEach(function(task, index) {
-  //     recentArray[]
-  //   })
-  // }
-  //use the highest number of date.now() (10 highest key values)
-
-  //If sort and reverse order, use this
-  recentArray.forEach(function(todo, index) {
-    if (index > 9) {
-      recentArray.splice(index, recentArray.length-index)
-    }
-  })
-  $('.todo-lib').children().remove();
-  recentArray.forEach(function(todo) {
-    prependTaskCard(todo);
-  })
-}
-
-
 
 $(window).on('keyup', function(e) {
   if(e.keyCode === 13 && ($('.title-input').val() !== '') && ($('.task-input').val() !== '' && $('.title-input').val().length < 120) && $('.task-input').val().length < 120){
@@ -65,17 +40,17 @@ $('.todo-lib').on('click', 'button.upvote-btn', function() {
 })
 
 $('.todo-card').on('click', 'button.completed-btn-select', function() {
-  var id = $(this).closest('.todo-card').prop('id');
-  var parseTask = JSON.parse(localStorage.getItem(id));
-    if (parseTask.completed === false) {
-      $(this).closest('.todo-card').toggleClass('completed-task');
-      parseTask.completed = true;
-    } else if (parseTask.completed === true) {
-      $(this).closest('.todo-card').toggleClass('completed-task');
-      parseTask.completed = false;
-    }
-  localStorage.setItem(id, JSON.stringify(parseTask))
-  // filterTasks();
+  console.log('click')
+  // var id = $(this).closest('.todo-card').prop('id');
+  // var parseTask = JSON.parse(localStorage.getItem(id));
+  //   if (parseTask.completed === false) {
+  //     $(this).closest('.todo-card').addClass('completed-task');
+  //     parseTask.completed = true;
+  //   } else if (parseTask.completed === true) {
+  //     $(this).closest('.todo-card').removeClass('completed-task');
+  //     parseTask.completed = false;
+  //   }
+  // localStorage.setItem(id, JSON.stringify(parseTask))
 })
 
 $('.todo-lib').on('focusout','.article-text-container',editTaskBody)
@@ -108,6 +83,16 @@ $('.search-box').on('input', function() {
   }
 })
 
+$('.show-completed-btn').on('click', function(e){
+  e.preventDefault();
+  showCompletedTodos();
+})
+
+$('.show-recent-btn').on('click', function(e) {
+  e.preventDefault();
+  showMostRecentTodos();
+})
+
 $('.critical-btn').on('click', importanceBtnFilter);
 $('.high-btn').on('click', importanceBtnFilter);
 $('.normal-btn').on('click', importanceBtnFilter);
@@ -115,6 +100,28 @@ $('.low-btn').on('click', importanceBtnFilter);
 $('.none-btn').on('click', importanceBtnFilter);
 
 
+function appendTaskCard(newTaskCard) {
+  $('.todo-lib').append(`<section
+    class="card-holder-section">
+      <article class="todo-card" id=${newTaskCard.id}>
+        <div class="task-name-section">
+          <h2 contenteditable='true' class="todo-card-header">${newTaskCard.title}</h2>
+          <button class="delete-btn" type="button" name="button"></button>
+        </div>
+        <div>
+          <p contenteditable='true' class="article-text-container">${newTaskCard.taskBody}</p>
+        </div>
+        <div class="quality-control-container">
+          <button class="upvote-btn" type="button" name="button"></button>
+          <button class="downvote-btn" type="button" name="button"></button>
+          <p>quality: <span class="quality">${newTaskCard.importance}</p>
+          <div class="completed-container">
+            <button class="completed-btn-select" type="button" name="button"></button>
+          </div>
+        </div>
+      </article>
+    </section>`);
+}
 
 function clearInputs() {
   $('.title-input').val('');
@@ -238,6 +245,39 @@ function pushLocalStorageIntoArray() {
   } return taskArray;
 }
 
+function showCompletedTodos() {
+  var localArray = pushLocalStorageIntoArray();
+  var completedArray = localArray.filter(function(todo) {
+    return todo.completed === true;
+  })
+  completedArray.forEach(function(todo) {
+    prependTaskCard(todo);
+  })
+}
+
+function showIncompleteTodos() {
+  var localArray = pushLocalStorageIntoArray();
+  var incompleteArray = localArray.filter(function(todo) {
+    return todo.completed === false;
+  })
+  $('.todo-lib').children().remove();
+  incompleteArray.forEach(function(todo) {
+    prependTaskCard(todo);
+  })
+}
+
+function showMostRecentTodos() {
+  $('.todo-lib').children().remove();
+  var recentArray = pushLocalStorageIntoArray();
+  recentArray = recentArray.reverse();
+
+  recentArray.forEach(function(todo, index) {
+    if (index < 10) {
+      appendTaskCard(todo);
+    }
+  })
+}
+
 function storeTaskCard(newTaskCard) {
   localStorage.setItem(newTaskCard.id, JSON.stringify(newTaskCard));
 }
@@ -307,7 +347,6 @@ function toggleCompletedTask() {
       parseTask.completed = false;
     }
   localStorage.setItem(id, JSON.stringify(parseTask))
-  // filterTasks();
 }
 
 function toggleSaveDisable() {
