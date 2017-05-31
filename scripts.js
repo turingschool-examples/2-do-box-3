@@ -31,26 +31,20 @@ $('.todo-lib').on('click','button.delete-btn', deleteTask)
 //may want to refactor to switch case function
 $('.todo-lib').on('click', 'button.downvote-btn', downvoteBtnClick)
 
-$('.todo-lib').on('click', 'button.upvote-btn', function() {
+$('.todo-lib').on('click', 'button.upvote-btn', upvoteBtnClick)
+
+$('.todo-lib').on('click', 'button.completed-btn-select', function() {
+  console.log('click')
   var id = $(this).closest('.todo-card').prop('id');
   var parseTask = JSON.parse(localStorage.getItem(id));
-  switchImportanceUp(parseTask);
+    if (parseTask.completed === false) {
+      $(this).closest('.todo-card').toggleClass('completed-task');
+      parseTask.completed = true;
+    } else if (parseTask.completed === true) {
+      $(this).closest('.todo-card').toggleClass('completed-task');
+      parseTask.completed = false;
+    }
   localStorage.setItem(id, JSON.stringify(parseTask));
-  filterTasks();
-})
-
-$('.todo-card').on('click', 'button.completed-btn-select', function() {
-  console.log('click')
-  // var id = $(this).closest('.todo-card').prop('id');
-  // var parseTask = JSON.parse(localStorage.getItem(id));
-  //   if (parseTask.completed === false) {
-  //     $(this).closest('.todo-card').addClass('completed-task');
-  //     parseTask.completed = true;
-  //   } else if (parseTask.completed === true) {
-  //     $(this).closest('.todo-card').removeClass('completed-task');
-  //     parseTask.completed = false;
-  //   }
-  // localStorage.setItem(id, JSON.stringify(parseTask))
 })
 
 $('.todo-lib').on('focusout','.article-text-container',editTaskBody)
@@ -247,12 +241,25 @@ function pushLocalStorageIntoArray() {
 
 function showCompletedTodos() {
   var localArray = pushLocalStorageIntoArray();
-  var completedArray = localArray.filter(function(todo) {
+  console.log('show completed button', $('.show-completed-btn').text())
+  if ($('.show-completed-btn').text() === 'Show Completed Todos') {
+    var completedArray = localArray.filter(function(todo) {
     return todo.completed === true;
-  })
-  completedArray.forEach(function(todo) {
-    prependTaskCard(todo);
-  })
+    })
+    completedArray.forEach(function(todo) {
+      prependTaskCard(todo);
+    })
+    $('.show-completed-btn').text('Hide Completed Todos')
+  } else if ($('.show-completed-btn').text() === 'Hide Completed Todos') {
+    $('.todo-lib').children().remove()
+    var incompleteArray = localArray.filter(function(todo) {
+      return todo.completed === false;
+    })ß
+    incompleteArray.forEach(function(todo) {
+      prependTaskCard(todo);
+    })
+    $('.show-completed-btn').text('Show Completed Todos')
+  }
 }
 
 function showIncompleteTodos() {
@@ -270,7 +277,6 @@ function showMostRecentTodos() {
   $('.todo-lib').children().remove();
   var recentArray = pushLocalStorageIntoArray();
   recentArray = recentArray.reverse();
-
   recentArray.forEach(function(todo, index) {
     if (index < 10) {
       appendTaskCard(todo);
@@ -340,10 +346,10 @@ function toggleCompletedTask() {
   var id = $(this).closest('.todo-card').prop('id');
   var parseTask = JSON.parse(localStorage.getItem(id));
     if (parseTask.completed === false) {
-      $(this).closest('.todo-card').toggleClass('completed-task');
+      $(this).closest('.todo-card').addClass('completed-task');
       parseTask.completed = true;
     } else if (parseTask.completed === true) {
-      $(this).closest('.todo-card').toggleClass('completed-task');
+      $(this).closest('.todo-card').removeClass('completed-task');
       parseTask.completed = false;
     }
   localStorage.setItem(id, JSON.stringify(parseTask))
@@ -357,6 +363,14 @@ function toggleSaveDisable() {
   } else {
     $('.save-btn').prop('disabled', false)
   }
+}
+
+function upvoteBtnClick() {
+  var id = $(this).closest('.todo-card').prop('id');
+  var parseTask = JSON.parse(localStorage.getItem(id));
+  switchImportanceUp(parseTask);
+  localStorage.setItem(id, JSON.stringify(parseTask));
+  filterTasks();
 }
 
 //Attempt to pull out separate functions for changing downvote

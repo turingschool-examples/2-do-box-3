@@ -14,6 +14,9 @@ body {
   height: 100%;
   width: 100%;
 }
+button:hover {
+  background-color: #045E55;
+}
 
 h1 {
   background-color: #E5F3F2;
@@ -118,6 +121,7 @@ form .save-btn {
   margin-top: 25px;
   width: 75%;
 }
+
 .importance-lvl-btn button {
   height: 40px;
   width: 16%;
@@ -128,6 +132,9 @@ form .save-btn {
   font-size: 15px;
   font-weight: 300;
   letter-spacing: 0.7px;
+}
+.importance-lvl-btn button:hover {
+  background-color: #045E55;
 }
 .search-box {
   margin-top: 25px;
